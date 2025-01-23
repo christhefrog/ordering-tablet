@@ -8,7 +8,7 @@ include_once("inc/database.php");
 $page = $_GET["page"];
 $indexUrl = "/ordering-tablet/";
 
-$isLoggedIn = $_SESSION["isLoggedIn"]??false;
+$isLoggedIn = $_SESSION["loggedUser"]??false;
 
 include "views/header.php";
 

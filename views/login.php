@@ -1,5 +1,5 @@
 <?php
-    include "inc/auth.php";
+    include "inc/user.php";
 
     $message = "";
 
@@ -18,7 +18,8 @@
             if (gettype($user) == "string") {
                 $message = $user;
             } else {
-                $_SESSION["isLoggedIn"] = true;
+                $_SESSION["loggedUser"] = $user;
+                updateUserLastLogin($con, $user);
                 header("Location: " . $indexUrl);
             }
         }

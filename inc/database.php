@@ -11,14 +11,22 @@ if($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }
 
-$table = "CREATE TABLE IF NOT EXISTS Users(
+$sql = "CREATE TABLE IF NOT EXISTS Users(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    login VARCHAR(128) NOT NULL,
-    password VARCHAR(128) NULL,
-    created_at DATE NOT NULL DEFAULT NOW()
+    login VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    userType ENUM('Admin', 'Supervisor', 'Employee') NOT NULL DEFAULT 'Employee', 
+    lastLogin DATETIME DEFAULT NULL,
+    createdAt DATETIME NOT NULL DEFAULT NOW()
 )";
 
-if($con->query($table) === false) {
+if($con->query($sql) === false) {
     die($con->error);
 }
 
+// Add test user
+if($con->query("SELECT id FROM Users WHERE login='admin'")->num_rows == 0)
+{
+    $adminhash = hash("sha256", "admin");
+    $con->query("INSERT INTO Users (login, password, userType) VALUES ('admin', '$adminhash', 'ADMIN')");
+}
